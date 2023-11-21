@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:notjust_hack/commons/providers/fire_auth_provider.dart';
 import 'package:notjust_hack/feature/authentication/view/widgets/login_form.dart';
 import 'package:notjust_hack/feature/authentication/view/widgets/register_form.dart';
+import 'package:notjust_hack/feature/user/userNav.dart';
 
 import '../../../res/strings.dart';
 import '../../../utils/logger.dart';
@@ -27,7 +29,7 @@ class _AuthViewState extends ConsumerState<AuthView> {
       (previous, next) {
         if (next.value != null) {
           Log().info("User is logged in");
-          //GoRouter.of(context).pushReplacement(HomeView.routePath);
+          GoRouter.of(context).pushReplacement(UserNav.routePath);
         } else {
           Log().info("User is not logged in");
         }
