@@ -63,17 +63,17 @@ class _RegisterOptionsState extends ConsumerState<RegisterOptions> {
                       _selectedIndex = index;
                     });
                   },
-                  children: const [
+                  children: [
                     SizedBox(
-                      width: 150,
-                      child: Padding(
+                      width: MediaQuery.of(context).size.width * 0.5 - 55,
+                      child: const Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Center(child: Text('User')),
                       ),
                     ),
                     SizedBox(
-                      width: 150,
-                      child: Padding(
+                      width: MediaQuery.of(context).size.width * 0.5 - 55,
+                      child: const Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Center(child: Text('Business')),
                       ),

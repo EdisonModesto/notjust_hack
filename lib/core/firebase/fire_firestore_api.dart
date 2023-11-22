@@ -37,4 +37,25 @@ class FirestoreApi {
       return Left(e.toString());
     }
   }
+
+  Future<Either<String, Stream<QuerySnapshot<Map<String, dynamic>>>>> getBusinesses() async {
+    try {
+      Log().info('Getting all businesses');
+
+      final user = _users.where('type', isEqualTo: 'business').orderBy('location', descending: false).snapshots();
+      return Right(user);
+    } catch (e) {
+      return Left(e.toString());
+    }
+  }
+
+  Future<Either<String, Stream<DocumentSnapshot<Map<String, dynamic>>>>> getSpecificUser(userId) async {
+    try {
+      Log().info('Getting specific user with userId: $userId');
+      final user = _users.doc(userId).snapshots();
+      return Right(user);
+    } catch (e) {
+      return Left(e.toString());
+    }
+  }
 }

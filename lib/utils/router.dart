@@ -45,7 +45,7 @@ final GoRouter router = GoRouter(
       name: "discoverDetails",
       builder: (BuildContext context, GoRouterState state) {
         return DiscoverDetails(
-          imageUrl: state.pathParameters['imageUrl'] ?? '',
+          id: state.pathParameters['id'] ?? '',
         );
       },
     ),

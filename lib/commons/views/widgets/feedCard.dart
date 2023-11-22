@@ -1,14 +1,26 @@
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:notjust_hack/res/strings.dart';
+import 'package:notjust_hack/utils/geocoding_service.dart';
 
 class FeedCard extends ConsumerStatefulWidget {
-  const FeedCard({super.key, this.ontap});
+  FeedCard({
+    super.key,
+    this.ontap,
+    required this.image,
+    required this.description,
+    required this.title,
+    required this.location,
+  });
 
   final VoidCallback? ontap;
+  String image;
+  String title;
+  String description;
+  GeoPoint location;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _DiscoverCardState();
@@ -32,7 +44,7 @@ class _DiscoverCardState extends ConsumerState<FeedCard> {
                 Expanded(
                   flex: 16,
                   child: Image.network(
-                    'https://picsum.photos/seed/${index * 100}/200/200',
+                    widget.image,
                     fit: BoxFit.cover,
                     height: 190,
                   ),
@@ -45,7 +57,7 @@ class _DiscoverCardState extends ConsumerState<FeedCard> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Johns Eatery',
+                          widget.title,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: GoogleFonts.aleo(
@@ -58,7 +70,7 @@ class _DiscoverCardState extends ConsumerState<FeedCard> {
                           height: 5,
                         ),
                         Text(
-                          AppStrings.dummyLong,
+                          widget.description,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 4,
                           style: GoogleFonts.aleo(
@@ -76,11 +88,29 @@ class _DiscoverCardState extends ConsumerState<FeedCard> {
                             const SizedBox(
                               width: 5,
                             ),
-                            Text(
-                              '123 Main St',
-                              style: GoogleFonts.aleo(
-                                fontSize: 12,
-                                color: Colors.black,
+                            Expanded(
+                              child: FutureBuilder(
+                                future: GeocodingService().getAddressFromGeoPoint(widget.location),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return Text(
+                                      snapshot.data!,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: GoogleFonts.aleo(
+                                        fontSize: 12,
+                                        color: Colors.black,
+                                      ),
+                                    );
+                                  }
+                                  return Text(
+                                    '...',
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.aleo(
+                                      fontSize: 12,
+                                      color: Colors.black,
+                                    ),
+                                  );
+                                },
                               ),
                             ),
                           ],

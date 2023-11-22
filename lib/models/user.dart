@@ -12,6 +12,7 @@ class UserModel {
 
   GeoPoint? location;
   String? type;
+  String? id;
 
   UserModel({
     required this.email,
@@ -24,6 +25,7 @@ class UserModel {
     required this.businessImages,
     required this.location,
     required this.type,
+    this.id,
   });
 
   UserModel.fromJson(Map<String, dynamic> json) {
@@ -37,6 +39,7 @@ class UserModel {
     businessImages = json['businessImages'].cast<String>();
     location = json['location'];
     type = json['type'];
+    id = json['id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -51,6 +54,7 @@ class UserModel {
     data['businessImages'] = businessImages;
     data['location'] = location;
     data['type'] = type;
+    data['id'] = id;
 
     return data;
   }

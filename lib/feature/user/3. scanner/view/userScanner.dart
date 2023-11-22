@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:qr_code_dart_scan/qr_code_dart_scan.dart';
 
 class UserScanner extends ConsumerStatefulWidget {
@@ -47,6 +48,17 @@ class _UserScannerState extends ConsumerState<UserScanner> {
           // result.resultMetadata
           // result.time
           print(result.text);
+
+          List<String> parsedString = result.text.split(':');
+
+          if (parsedString.length == 2) {
+            GoRouter.of(context).pushNamed(
+              'discoverDetails',
+              pathParameters: {
+                'id': parsedString[1],
+              },
+            );
+          }
         },
       ),
     );
