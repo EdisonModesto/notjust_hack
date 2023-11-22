@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:notjust_hack/commons/views/screens/MapView.dart';
+import 'package:notjust_hack/commons/views/widgets/appBar.dart';
 import 'package:notjust_hack/feature/user/1.%20discover/view/userDiscover.dart';
 import 'package:notjust_hack/feature/user/2.%20events/view/userEvents.dart';
 import 'package:notjust_hack/feature/user/3.%20scanner/view/userScanner.dart';
@@ -43,56 +42,7 @@ class _HomeViewState extends ConsumerState<UserNav> {
     final userData = ref.watch(userDataProvider);
 
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(120),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-            child: Row(
-              children: [
-                const Icon(
-                  Icons.wb_sunny_outlined,
-                  color: Colors.black,
-                ),
-                const SizedBox(
-                  width: 15,
-                ),
-                Text(
-                  'Good Morning!',
-                  style: GoogleFonts.aleo(
-                    fontSize: 18,
-                  ),
-                ),
-                const Spacer(),
-                ElevatedButton(
-                  onPressed: () {
-                    GoRouter.of(context).push(MapView.routePath);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors().primary.withOpacity(0.8),
-                    foregroundColor: AppColors().white,
-                    elevation: 0,
-                  ),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.map_outlined),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      Text(
-                        "Map",
-                        style: GoogleFonts.aleo(
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-      ),
+      appBar: const PreferredSize(preferredSize: Size.fromHeight(120), child: CustomAppBar()),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: currIndex == 2 ? 0 : 20.0),
         child: IndexedStack(

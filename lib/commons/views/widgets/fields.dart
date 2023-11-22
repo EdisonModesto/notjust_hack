@@ -81,9 +81,10 @@ class _AppFieldPasswordState extends ConsumerState<AppFieldPassword> {
 }
 
 class AppFieldCommon extends ConsumerStatefulWidget {
-  AppFieldCommon({super.key, required this.controller, required this.text});
+  AppFieldCommon({super.key, required this.controller, required this.text, this.maxlines = 1});
   TextEditingController controller;
   String text;
+  int maxlines;
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _AppFieldCommonState();
 }
@@ -93,6 +94,7 @@ class _AppFieldCommonState extends ConsumerState<AppFieldCommon> {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: widget.controller,
+      maxLines: widget.maxlines,
       validator: (value) {
         if (value!.isNotEmpty) {
           return null;

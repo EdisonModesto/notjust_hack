@@ -4,6 +4,7 @@ import 'package:notjust_hack/commons/views/screens/MapView.dart';
 import 'package:notjust_hack/feature/authentication/view/login_view.dart';
 import 'package:notjust_hack/feature/authentication/view/register_options_view.dart';
 import 'package:notjust_hack/feature/authentication/view/register_view.dart';
+import 'package:notjust_hack/feature/business/view/businessHome.dart';
 import 'package:notjust_hack/feature/user/1.%20discover/view/screens/discoverDetails.dart';
 import 'package:notjust_hack/feature/user/3.%20scanner/view/userScanner.dart';
 import 'package:notjust_hack/feature/user/userNav.dart';
@@ -58,6 +59,12 @@ final GoRouter router = GoRouter(
       path: MapView.routePath,
       builder: (BuildContext context, GoRouterState state) {
         return const MapView();
+      },
+    ),
+    GoRoute(
+      path: BusinessHome.routePath,
+      builder: (BuildContext context, GoRouterState state) {
+        return const BusinessHome();
       },
     ),
   ],

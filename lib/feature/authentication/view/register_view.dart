@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:notjust_hack/commons/providers/fire_auth_provider.dart';
+import 'package:notjust_hack/commons/providers/user_data_provider.dart';
 import 'package:notjust_hack/feature/authentication/view/login_view.dart';
 import 'package:notjust_hack/feature/authentication/view/widgets/business_register_form.dart';
 import 'package:notjust_hack/feature/authentication/view/widgets/user_register_form.dart';
@@ -25,12 +26,21 @@ class RegisterView extends ConsumerStatefulWidget {
 class _RegisterViewState extends ConsumerState<RegisterView> {
   @override
   Widget build(BuildContext context) {
+    ref.listen(userDataProvider, (previous, next) {
+      if (next.value != null) {
+        if (next.value!.type == "user") {
+          GoRouter.of(context).pushReplacement(UserNav.routePath);
+        } else if (next.value!.type == "business") {
+          GoRouter.of(context).pushReplacement(UserNav.routePath);
+        }
+      }
+    });
+
     ref.listen(
       userIdProvider,
       (previous, next) {
         if (next.value != null) {
           Log().info("User is logged in");
-          GoRouter.of(context).pushReplacement(UserNav.routePath);
         } else {
           Log().info("User is not logged in");
         }
@@ -44,7 +54,6 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
           width: double.infinity,
           child: SingleChildScrollView(
             child: SizedBox(
-              height: MediaQuery.of(context).size.height * 0.85,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
