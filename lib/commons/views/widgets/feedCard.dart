@@ -49,7 +49,7 @@ class _DiscoverCardState extends ConsumerState<FeedCard> {
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: GoogleFonts.aleo(
-                            fontSize: 18,
+                            fontSize: 17,
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                           ),

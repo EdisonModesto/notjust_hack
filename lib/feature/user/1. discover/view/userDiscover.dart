@@ -20,7 +20,7 @@ class _UserDiscoverState extends ConsumerState<UserDiscover> {
         Text(
           'Discover',
           style: GoogleFonts.aleo(
-            fontSize: 30,
+            fontSize: 26,
             fontWeight: FontWeight.bold,
             color: Colors.black,
           ),

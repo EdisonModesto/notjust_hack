@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:notjust_hack/commons/views/screens/MapView.dart';
 import 'package:notjust_hack/feature/user/1.%20discover/view/userDiscover.dart';
 import 'package:notjust_hack/feature/user/2.%20events/view/userEvents.dart';
 import 'package:notjust_hack/feature/user/3.%20scanner/view/userScanner.dart';
@@ -12,7 +13,7 @@ import 'package:notjust_hack/res/themes.dart';
 import '../../commons/providers/fire_auth_provider.dart';
 import '../../commons/providers/user_data_provider.dart';
 import '../../utils/logger.dart';
-import '../authentication/view/auth_view.dart';
+import '../authentication/view/login_view.dart';
 
 class UserNav extends ConsumerStatefulWidget {
   const UserNav({super.key});
@@ -34,7 +35,7 @@ class _HomeViewState extends ConsumerState<UserNav> {
           Log().info("User is logged in");
         } else {
           Log().info("User is not logged in");
-          GoRouter.of(context).pushReplacement(AuthView.routePath);
+          GoRouter.of(context).pushReplacement(LoginView.routePath);
         }
       },
     );
@@ -46,12 +47,27 @@ class _HomeViewState extends ConsumerState<UserNav> {
         preferredSize: const Size.fromHeight(120),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
               children: [
+                const Icon(
+                  Icons.wb_sunny_outlined,
+                  color: Colors.black,
+                ),
+                const SizedBox(
+                  width: 15,
+                ),
+                Text(
+                  'Good Morning!',
+                  style: GoogleFonts.aleo(
+                    fontSize: 18,
+                  ),
+                ),
+                const Spacer(),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    GoRouter.of(context).push(MapView.routePath);
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors().primary.withOpacity(0.8),
                     foregroundColor: AppColors().white,
@@ -78,13 +94,13 @@ class _HomeViewState extends ConsumerState<UserNav> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        padding: EdgeInsets.symmetric(horizontal: currIndex == 2 ? 0 : 20.0),
         child: IndexedStack(
           index: currIndex,
           children: const [
             UserDiscover(),
             UserEvents(),
-            UserScanner(),
+            SizedBox(),
             UserCommunity(),
             UserProfile(),
           ],
@@ -102,9 +118,13 @@ class _HomeViewState extends ConsumerState<UserNav> {
                 elevation: 4,
                 selectedIndex: currIndex,
                 onDestinationSelected: (index) {
-                  setState(() {
-                    currIndex = index;
-                  });
+                  if (index != 2) {
+                    setState(() {
+                      currIndex = index;
+                    });
+                  } else {
+                    GoRouter.of(context).push(UserScanner.routePath);
+                  }
                 },
                 destinations: const [
                   NavigationDestination(
@@ -137,8 +157,7 @@ class _HomeViewState extends ConsumerState<UserNav> {
         offset: const Offset(0, 15),
         child: FloatingActionButton(
           onPressed: () {
-            currIndex = 2;
-            setState(() {});
+            GoRouter.of(context).push(UserScanner.routePath);
           },
           elevation: 0,
           backgroundColor: AppColors().primary,

@@ -8,14 +8,16 @@ import '../../../../commons/views/widgets/fields.dart';
 import '../../../../res/themes.dart';
 import '../../controller/auth_controller.dart';
 
-class RegisterForm extends ConsumerStatefulWidget {
-  const RegisterForm({super.key});
+class UserRegisterForm extends ConsumerStatefulWidget {
+  const UserRegisterForm({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _RegisterFormState();
 }
 
-class _RegisterFormState extends ConsumerState<RegisterForm> {
+class _RegisterFormState extends ConsumerState<UserRegisterForm> {
+  final firstCtrl = TextEditingController();
+  final lastCtrl = TextEditingController();
   final emailCtrl = TextEditingController();
   final passwordCtrl = TextEditingController();
 
@@ -28,6 +30,28 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Row(
+            children: [
+              Expanded(
+                child: AppFieldCommon(
+                  controller: firstCtrl,
+                  text: "First Name",
+                ),
+              ),
+              const SizedBox(
+                width: 20,
+              ),
+              Expanded(
+                child: AppFieldCommon(
+                  controller: lastCtrl,
+                  text: "Last Name",
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 20,
+          ),
           AppFieldEmail(controller: emailCtrl),
           const SizedBox(
             height: 20,
@@ -45,9 +69,9 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
                 final auth = ref.watch(authControllerProvider);
                 UserModel user = UserModel(
                   email: emailCtrl.text,
-                  firstName: "Edison",
-                  lastName: "Modesto",
-                  profilePhoto: "",
+                  firstName: firstCtrl.text,
+                  lastName: lastCtrl.text,
+                  profilePhoto: "https://picsum.photos/seed/picsum/200/200",
                   coverPhoto: "",
                   businessName: "",
                   businessDescription: "",

@@ -79,3 +79,35 @@ class _AppFieldPasswordState extends ConsumerState<AppFieldPassword> {
     );
   }
 }
+
+class AppFieldCommon extends ConsumerStatefulWidget {
+  AppFieldCommon({super.key, required this.controller, required this.text});
+  TextEditingController controller;
+  String text;
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _AppFieldCommonState();
+}
+
+class _AppFieldCommonState extends ConsumerState<AppFieldCommon> {
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: widget.controller,
+      validator: (value) {
+        if (value!.isNotEmpty) {
+          return null;
+        }
+        return '${widget.text} is required';
+      },
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      decoration: InputDecoration(
+        hintText: widget.text,
+        border: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(10),
+          ),
+        ),
+      ),
+    );
+  }
+}
