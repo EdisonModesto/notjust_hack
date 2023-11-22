@@ -16,7 +16,7 @@ class _UserCommunityState extends ConsumerState<UserCommunity> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Posts Nearby',
+          'FAQS',
           style: GoogleFonts.aleo(
             fontSize: 26,
             fontWeight: FontWeight.bold,

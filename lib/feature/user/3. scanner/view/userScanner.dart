@@ -52,12 +52,21 @@ class _UserScannerState extends ConsumerState<UserScanner> {
           List<String> parsedString = result.text.split(':');
 
           if (parsedString.length == 2) {
-            GoRouter.of(context).pushNamed(
-              'discoverDetails',
-              pathParameters: {
-                'id': parsedString[1],
-              },
-            );
+            if (parsedString[0] == 'business') {
+              GoRouter.of(context).pushNamed(
+                'discoverDetails',
+                pathParameters: {
+                  'id': parsedString[1],
+                },
+              );
+            } else if (parsedString[0] == 'event') {
+              GoRouter.of(context).pushNamed(
+                'eventDetails',
+                pathParameters: {
+                  'id': parsedString[1],
+                },
+              );
+            }
           }
         },
       ),

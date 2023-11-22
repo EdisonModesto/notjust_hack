@@ -5,26 +5,24 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:location_picker_flutter_map/location_picker_flutter_map.dart';
-import 'package:lottie/lottie.dart';
 import 'package:notjust_hack/commons/views/widgets/buttons.dart';
 import 'package:notjust_hack/commons/views/widgets/fields.dart';
-import 'package:notjust_hack/feature/authentication/controller/auth_controller.dart';
-import 'package:notjust_hack/models/user.dart';
+import 'package:notjust_hack/models/event.dart';
 import 'package:notjust_hack/res/themes.dart';
 import 'package:notjust_hack/utils/cloud_storage_service.dart';
-import 'package:notjust_hack/utils/location_service.dart';
 
-class BusinessRegisterForm extends ConsumerStatefulWidget {
-  const BusinessRegisterForm({super.key});
+class AddEvents extends ConsumerStatefulWidget {
+  const AddEvents({super.key});
+
+  static const routePath = '/addEvents';
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _BusinessRegisterFormState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _AddEventsState();
 }
 
-class _BusinessRegisterFormState extends ConsumerState<BusinessRegisterForm> {
+class _AddEventsState extends ConsumerState<AddEvents> {
   final businessNameCtrl = TextEditingController();
   final businessDescCtrl = TextEditingController();
   final emailCtrl = TextEditingController();
@@ -38,34 +36,38 @@ class _BusinessRegisterFormState extends ConsumerState<BusinessRegisterForm> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Position>(
-      future: LocationService().determinePosition(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          location = GeoPoint(snapshot.data!.latitude, snapshot.data!.longitude);
-          return Form(
+    return Scaffold(
+        body: SafeArea(
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          child: Form(
             key: formKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Text(
+                  'Add Event',
+                  style: GoogleFonts.aleo(
+                    fontSize: 24,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
                 AppFieldCommon(
                   controller: businessNameCtrl,
-                  text: "Business Name",
+                  text: "Event Name",
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-                AppFieldEmail(controller: emailCtrl),
-                const SizedBox(
-                  height: 20,
-                ),
-                AppFieldPassword(controller: passwordCtrl),
                 const SizedBox(
                   height: 20,
                 ),
                 AppFieldCommon(
                   controller: businessDescCtrl,
-                  text: "Business Description",
+                  text: "Event Description",
                   maxlines: 7,
                 ),
                 const SizedBox(
@@ -84,39 +86,37 @@ class _BusinessRegisterFormState extends ConsumerState<BusinessRegisterForm> {
                 const SizedBox(
                   height: 10,
                 ),
-                StatefulBuilder(builder: (context, setState) {
-                  return InkWell(
-                    onTap: () async {
-                      result = await FilePicker.platform.pickFiles(
-                        type: FileType.image,
-                      );
-                      setState(() {});
-                    },
-                    child: Container(
-                      height: 200,
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.grey.withOpacity(0.3),
-                      ),
-                      child: result == null
-                          ? const Center(
-                              child: Text('No image selected'),
-                            )
-                          : Image.file(
-                              File(result!.files.single.path!),
-                              fit: BoxFit.cover,
-                            ),
+                InkWell(
+                  onTap: () async {
+                    result = await FilePicker.platform.pickFiles(
+                      type: FileType.image,
+                    );
+                    setState(() {});
+                  },
+                  child: Container(
+                    height: 200,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.grey.withOpacity(0.3),
                     ),
-                  );
-                }),
+                    child: result == null
+                        ? const Center(
+                            child: Text('No image selected'),
+                          )
+                        : Image.file(
+                            File(result!.files.single.path!),
+                            fit: BoxFit.cover,
+                          ),
+                  ),
+                ),
                 const SizedBox(
                   height: 20,
                 ),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Where can we find you?',
+                    'Where will your event be?',
                     style: GoogleFonts.aleo(
                       fontSize: 16,
                       color: Colors.black,
@@ -160,58 +160,28 @@ class _BusinessRegisterFormState extends ConsumerState<BusinessRegisterForm> {
                 AppButtonFlat(
                   bgColor: AppColors().primary,
                   fgColor: AppColors().white,
-                  text: "Signup",
+                  text: "Add Event",
                   onTap: () async {
                     if (formKey.currentState!.validate() && location != const GeoPoint(0, 0) && result != null) {
-                      String imageUrl = await CloudService().uploadImage(result!);
-                      final auth = ref.watch(authControllerProvider);
-                      UserModel user = UserModel(
-                        email: emailCtrl.text,
-                        firstName: "",
-                        lastName: "",
-                        profilePhoto: "",
-                        coverPhoto: imageUrl,
-                        businessName: businessNameCtrl.text,
-                        businessDescription: businessDescCtrl.text,
-                        businessImages: [],
+                      String urlId = await CloudService().uploadImage(result!);
+                      EventModel newEvent = EventModel(
+                        name: businessNameCtrl.text,
+                        description: businessDescCtrl.text,
+                        image: urlId,
                         location: location,
-                        type: "business",
                       );
-                      auth.signUpEmail(emailCtrl.text, passwordCtrl.text, user);
+                      await FirebaseFirestore.instance.collection('Events').add(newEvent.toJson());
+                      Navigator.pop(context);
                     } else {
-                      Fluttertoast.showToast(
-                        msg: "Please fill in all the fields",
-                      );
+                      Fluttertoast.showToast(msg: "Please fill in all the fields");
                     }
                   },
                 ),
               ],
             ),
-          );
-        }
-        if (snapshot.hasError) {
-          return Center(
-            child: Text(snapshot.error.toString()),
-          );
-        }
-        return Center(
-          child: Column(
-            children: [
-              Lottie.asset(
-                'assets/animations/loading.json',
-                height: 200,
-              ),
-              Text(
-                'Getting Location...',
-                style: GoogleFonts.aleo(
-                  fontSize: 24,
-                  color: Colors.black,
-                ),
-              ),
-            ],
           ),
-        );
-      },
-    );
+        ),
+      ),
+    ));
   }
 }

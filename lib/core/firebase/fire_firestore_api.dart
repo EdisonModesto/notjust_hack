@@ -16,6 +16,7 @@ class FirestoreApi {
   FirestoreApi({required this.userID});
 
   final _users = FirebaseFirestore.instance.collection('Users');
+  final _events = FirebaseFirestore.instance.collection('Events');
 
   Future<Either<String, String>> createUser(UserModel user) async {
     try {
@@ -42,7 +43,7 @@ class FirestoreApi {
     try {
       Log().info('Getting all businesses');
 
-      final user = _users.where('type', isEqualTo: 'business').orderBy('location', descending: false).snapshots();
+      final user = _users.where('type', isEqualTo: 'business').orderBy('location', descending: true).snapshots();
       return Right(user);
     } catch (e) {
       return Left(e.toString());
@@ -53,6 +54,27 @@ class FirestoreApi {
     try {
       Log().info('Getting specific user with userId: $userId');
       final user = _users.doc(userId).snapshots();
+      return Right(user);
+    } catch (e) {
+      return Left(e.toString());
+    }
+  }
+
+  Future<Either<String, Stream<QuerySnapshot<Map<String, dynamic>>>>> getEvents() async {
+    try {
+      Log().info('Getting all events');
+
+      final user = _events.orderBy('location', descending: true).snapshots();
+      return Right(user);
+    } catch (e) {
+      return Left(e.toString());
+    }
+  }
+
+  Future<Either<String, Stream<DocumentSnapshot<Map<String, dynamic>>>>> getSpecificEvent(eventId) async {
+    try {
+      Log().info('Getting specific user with userId: $eventId');
+      final user = _events.doc(eventId).snapshots();
       return Right(user);
     } catch (e) {
       return Left(e.toString());

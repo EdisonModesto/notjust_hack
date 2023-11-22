@@ -6,6 +6,8 @@ import 'package:notjust_hack/feature/authentication/view/register_options_view.d
 import 'package:notjust_hack/feature/authentication/view/register_view.dart';
 import 'package:notjust_hack/feature/business/view/businessHome.dart';
 import 'package:notjust_hack/feature/user/1.%20discover/view/screens/discoverDetails.dart';
+import 'package:notjust_hack/feature/user/2.%20events/view/screens/addEvents.dart';
+import 'package:notjust_hack/feature/user/2.%20events/view/screens/eventsDetails.dart';
 import 'package:notjust_hack/feature/user/3.%20scanner/view/userScanner.dart';
 import 'package:notjust_hack/feature/user/userNav.dart';
 
@@ -65,6 +67,21 @@ final GoRouter router = GoRouter(
       path: BusinessHome.routePath,
       builder: (BuildContext context, GoRouterState state) {
         return const BusinessHome();
+      },
+    ),
+    GoRoute(
+      path: AddEvents.routePath,
+      builder: (BuildContext context, GoRouterState state) {
+        return const AddEvents();
+      },
+    ),
+    GoRoute(
+      path: EventsDetail.routePath,
+      name: "eventDetails",
+      builder: (BuildContext context, GoRouterState state) {
+        return EventsDetail(
+          id: state.pathParameters['id'] ?? '',
+        );
       },
     ),
   ],

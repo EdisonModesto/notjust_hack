@@ -54,7 +54,6 @@ class UserModel {
     data['businessImages'] = businessImages;
     data['location'] = location;
     data['type'] = type;
-    data['id'] = id;
 
     return data;
   }

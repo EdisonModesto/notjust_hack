@@ -31,7 +31,6 @@ class _BusinessHomeState extends ConsumerState<BusinessHome> {
 
   @override
   Widget build(BuildContext context) {
-    final userData = ref.watch(userDataProvider);
     ref.listen(
       userIdProvider,
       (previous, next) {
@@ -43,6 +42,8 @@ class _BusinessHomeState extends ConsumerState<BusinessHome> {
         }
       },
     );
+
+    final userData = ref.watch(userDataProvider);
 
     return Scaffold(
       appBar: const PreferredSize(

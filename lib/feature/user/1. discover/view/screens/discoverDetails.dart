@@ -27,10 +27,10 @@ class _DiscoverDetailsState extends ConsumerState<DiscoverDetails> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors().primary,
         foregroundColor: AppColors().white,
-        tooltip: 'Navigate',
+        tooltip: 'View on Map',
         onPressed: () {},
         child: const Icon(
-          Icons.navigation_outlined,
+          Icons.map_outlined,
         ),
       ),
       body: details.when(

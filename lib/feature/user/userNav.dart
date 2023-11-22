@@ -90,8 +90,8 @@ class _HomeViewState extends ConsumerState<UserNav> {
                     label: "",
                   ),
                   NavigationDestination(
-                    icon: Icon(Icons.people_alt_outlined),
-                    label: "Community",
+                    icon: Icon(Icons.help_center_outlined),
+                    label: "Help",
                   ),
                   NavigationDestination(
                     icon: Icon(Icons.person),
