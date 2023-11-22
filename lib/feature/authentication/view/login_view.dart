@@ -26,8 +26,10 @@ class _AuthViewState extends ConsumerState<LoginView> {
   @override
   Widget build(BuildContext context) {
     //final userId = ref.watch(userIdProvider);
+    ref.watch(userDataProvider);
+
     ref.listen(userDataProvider, (previous, next) {
-      if (next.value != null) {
+      if (next.value != null && ref.read(userIdProvider).value != null) {
         if (next.value!.type == "user") {
           GoRouter.of(context).pushReplacement(UserNav.routePath);
         } else if (next.value!.type == "business") {

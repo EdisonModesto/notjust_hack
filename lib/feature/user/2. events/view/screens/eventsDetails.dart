@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:notjust_hack/commons/views/screens/MapView2.dart';
 import 'package:notjust_hack/commons/views/widgets/loading.dart';
 import 'package:notjust_hack/feature/user/2.%20events/riverpod/specificEventProvider.dart';
 import 'package:notjust_hack/res/themes.dart';
@@ -30,14 +32,25 @@ class _EventsDetailState extends ConsumerState<EventsDetail> {
   Widget build(BuildContext context) {
     final details = ref.watch(specificEventProvider(widget.id));
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: AppColors().primary,
-        foregroundColor: AppColors().white,
-        tooltip: 'View on Map',
-        onPressed: () {},
-        child: const Icon(
-          Icons.map_outlined,
-        ),
+      floatingActionButton: details.when(
+        data: (data) {
+          return FloatingActionButton(
+            backgroundColor: AppColors().primary,
+            foregroundColor: AppColors().white,
+            tooltip: 'View on Map',
+            onPressed: () {
+              GoRouter.of(context).push(
+                MapView2.routePath,
+                extra: data.location,
+              );
+            },
+            child: const Icon(
+              Icons.map_outlined,
+            ),
+          );
+        },
+        error: (error, stackTrace) => Text(error.toString()),
+        loading: () => const CustomLoader(),
       ),
       body: details.when(
         data: (data) {

@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:notjust_hack/commons/views/screens/MapView.dart';
+import 'package:notjust_hack/commons/views/screens/MapView2.dart';
 import 'package:notjust_hack/feature/authentication/view/login_view.dart';
 import 'package:notjust_hack/feature/authentication/view/register_options_view.dart';
 import 'package:notjust_hack/feature/authentication/view/register_view.dart';
@@ -61,6 +63,14 @@ final GoRouter router = GoRouter(
       path: MapView.routePath,
       builder: (BuildContext context, GoRouterState state) {
         return const MapView();
+      },
+    ),
+    GoRoute(
+      path: MapView2.routePath,
+      builder: (BuildContext context, GoRouterState state) {
+        return MapView2(
+          location: state.extra as GeoPoint,
+        );
       },
     ),
     GoRoute(
